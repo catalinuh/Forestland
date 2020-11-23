@@ -1,11 +1,36 @@
+@font-face {
+    font-family: breatheFire;
+    src: url(BreatheFireIi.woff);
+}
+
+@font-face {
+    font-family: DragonFire;
+    src: url(DragonFire.woff);
+}
+
 html,
 body {
     margin: 0;
     padding: 0;
 }
 
+body {
+    background-image: url("https://i.imgur.com/vwYBRko.png");
+    background-size: cover;
+}
+
 #content {
     display: block;
     width: 100%;
     text-align: center;
+}
+
+#header {
+    text-align: center;
+    font-family: DragonFire;
+    text-shadow: -1px 1px 0 #fff,
+        1px 1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px -1px 0 #fff;
+    font-size: 40px;
 }
