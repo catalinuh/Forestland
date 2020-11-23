@@ -7,23 +7,32 @@ var BattleScene = new Phaser.Class({
     preload: function() {
     },
     create: function () {
-        this.cameras.main.setBackgroundColor('rgba(0, 200, 0, 0.5)');
+        this.cameras.main.setBackgroundColor('rgb(123, 173, 44)');
+
         this.startBattle();
+
         this.sys.events.on('wake', this.startBattle, this);
     },
     startBattle: function() {
         var warrior = new PlayerCharacter(this, 250, 50, 'player', 1, 'Warrior', 100, 20);
         this.add.existing(warrior);
+
         var mage = new PlayerCharacter(this, 250, 100, 'player', 4, 'Mage', 80, 8);
         this.add.existing(mage);
-        var dragonblue = new Enemy(this, 50, 50, 'dragonblue', null, 'Dragon', 30, 3);
+
+        var dragonblue = new Enemy(this, 50, 50, 'dragonblue', null, 'Fluffy', 30, 3);
         this.add.existing(dragonblue);
-        var dragonOrange = new Enemy(this, 50, 100, 'dragonorrange', null, 'Dragon2', 30, 3);
+
+        var dragonOrange = new Enemy(this, 50, 100, 'dragonorrange', null, 'Sprinkles', 30, 3);
         this.add.existing(dragonOrange);
+
         this.heroes = [ warrior, mage ];
         this.enemies = [ dragonblue, dragonOrange ];
+
         this.units = this.heroes.concat(this.enemies);
+
         this.index = -1;
+
         this.scene.run('UIScene');
     },
     nextTurn: function() {
@@ -50,6 +59,9 @@ var BattleScene = new Phaser.Class({
         for (var i = 0; i < this.enemies.length; i++) {
             if (this.enemies[i].living)
                 victory = false;
+        }
+        if (victory) {
+            // this.scene.events.emit('Message', 'You Win!!');
         }
         var gameOver = true;
         for (var i = 0; i < this.heroes.length; i++) {
@@ -225,6 +237,7 @@ var ActionsMenu = new Phaser.Class({
     function ActionsMenu(x, y, scene) {
         Menu.call(this, x, y, scene);
         this.addMenuItem('Attack');
+        console.log('Player: ', this.PlayerCharacter)
     },
     confirm: function() {
         this.scene.events.emit('SelectedAction');
@@ -248,32 +261,47 @@ var UIScene = new Phaser.Class({
     },
     create: function () {
         this.graphics = this.add.graphics();
+
         this.graphics.lineStyle(1, 0xffffff);
-        this.graphics.fillStyle(0x031f4c, 1);
+        this.graphics.fillStyle(0x4b76a9, 0.8);
+
         this.graphics.strokeRect(2, 150, 90, 100);
         this.graphics.fillRect(2, 150, 90, 100);
+
         this.graphics.strokeRect(95, 150, 90, 100);
         this.graphics.fillRect(95, 150, 90, 100);
+
         this.graphics.strokeRect(188, 150, 130, 100);
         this.graphics.fillRect(188, 150, 130, 100);
+
         this.menus = this.add.container();
+
         this.heroesMenu = new HeroesMenu(195, 153, this);
         this.actionsMenu = new ActionsMenu(100, 153, this);
         this.enemiesMenu = new EnemiesMenu(8, 153, this);
+
         this.currentMenu = this.actionsMenu;
+
         this.menus.add(this.heroesMenu);
         this.menus.add(this.actionsMenu);
         this.menus.add(this.enemiesMenu);
+
         this.battleScene = this.scene.get('BattleScene');
+
         this.remapHeroes();
         this.remapEnemies();
+
         this.input.keyboard.on('keydown', this.onKeyInput, this);
+
         this.battleScene.events.on('PlayerSelect', this.onPlayerSelect, this);
         this.events.on('SelectedAction', this.onSelectedAction, this);
         this.events.on('Enemy', this.onEnemy, this);
+
         this.sys.events.on('wake', this.createMenu, this);
+
         this.message = new Message(this, this.battleScene.events);
         this.add.existing(this.message);
+
         this.createMenu();
     },
     createMenu: function() {
@@ -327,8 +355,8 @@ var Message = new Phaser.Class({
         this.add(graphics);
         graphics.lineStyle(1, 0xffffff, 0.8);
         graphics.fillStyle(0x031f4c, 0.3);
-        graphics.strokeRect(-90, -15, 180, 30);
-        graphics.fillRect(-90, -15, 180, 30);
+        graphics.strokeRect(-90, -15, 180, 40);
+        graphics.fillRect(-90, -15, 180, 40);
         this.text = new Phaser.GameObjects.Text(scene, 0, 0, "", {
             color: '#ffffff',
             align: 'center',
