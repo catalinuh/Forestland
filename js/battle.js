@@ -237,7 +237,6 @@ var ActionsMenu = new Phaser.Class({
     function ActionsMenu(x, y, scene) {
         Menu.call(this, x, y, scene);
         this.addMenuItem('Attack');
-        console.log('Player: ', this.PlayerCharacter)
     },
     confirm: function() {
         this.scene.events.emit('SelectedAction');
